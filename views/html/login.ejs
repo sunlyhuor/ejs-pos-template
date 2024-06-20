@@ -1,0 +1,9 @@
+<%- include("../components/header") %>
+        <script>
+            async function login(){
+                console.log( await axios("") )
+            }
+        </script>
+        <h1>Welcome to <%= title %></h1>
+        <button onclick="login()" > Login </button>
+<%- include("../components/footer") %>
