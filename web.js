@@ -6,35 +6,15 @@ const bodyParser = require("body-parser")
 const cookieParser = require('cookie-parser');
 const path = require("path")
 const fs = require("fs")
-const env = require("dotenv")
+const env = require("dotenv");
+const { LangMiddleware } = require('./middlewares/middleware');
+const lang = require('./locales/lang');
 
 // env
 env.config()
 
-function parseCookieString(cookieString) {
-    const cookieObj = {};
-    
-    // Split the string by '; ' to get individual key=value pairs
-    const pairs = cookieString.split('; ');
-
-    pairs.forEach(pair => {
-        // Split each pair by '=' to get the key and value
-        const [key, value] = pair.split('=');
-        // Assign the key-value pair to the object
-        cookieObj[key] = value;
-    });
-
-    return cookieObj;
-}
-
 // 
-app.use((req, res, next) => {
-    // res.json(parseCookieString(req.headers.cookie))
-    if( !parseCookieString(req.headers.cookie).LANG ){
-        res.cookie("LANG", process.env.DEFAULT_LANG, { maxAge: 24 * 60 * 60 * 2, httpOnly: true })
-    }
-    next()
-})
+app.use( LangMiddleware )
 
 // Middleware to parse incoming request bodies
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -47,6 +27,16 @@ app.use(cookieParser());
 
 // Public assets
 app.use(express.static(path.join(__dirname, 'views')));
+
+// Change lang
+app.get("/lang/:lang", (req, res) => {
+    if( !lang().some( d => d == req.params.lang ) ){
+        res.cookie("LANG", process.env.DEFAULT_LANG, { maxAge: 24 * 60 * 60 * 7, httpOnly: true })
+        res.redirect("/")
+    }
+    res.cookie("LANG", req.params.lang, { maxAge: 24 * 60 * 60 * 7, httpOnly: true })
+    return res.redirect(req.get("Referrer") || "/")
+})
 
 // Router
 app.use( user )
