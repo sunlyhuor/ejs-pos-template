@@ -1,6 +1,13 @@
     <%- include("../components/header") %>
-    <h1>Welcome to <%= title %></h1>
-    <h1>Lang: <%= lang %></h1>
-    <h1>Hello in <%= locals["HELLO"] %></h1>
-    <p class="text-red" >This is an example of rendering EJS templates with Express.</p>
+
+    <div class="grid grid-cols-12" >
+        <%- include("../components/menu") %>
+        <section class="text-on-primary col-span-12 lg:col-span-11 px-2" >
+            <h1>Welcome to <%= title %></h1>
+            <h1>Language: <%= lang %></h1>
+            <h1>Hello in <%= locals["HELLO"] %></h1>
+            <p class="text-red" >This is an example of rendering EJS templates with Express.</p>
+        </section>
+    </div>
+
     <%- include("../components/footer") %>

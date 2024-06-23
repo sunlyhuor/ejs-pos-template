@@ -1,4 +1,3 @@
-const locale = require("../utils/locale")
 const { parseCookieString } = require("../utils/utils")
 
 function LangMiddleware( req, res, next ) {

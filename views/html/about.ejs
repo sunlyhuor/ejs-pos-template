@@ -1,4 +1,10 @@
-    <%- include("../components/header") %>
-    <h1>Welcome to <%= title %></h1>
-    <%- include("../components/footer") %>
+<%- include("../components/header") %>
 
+<div class="grid grid-cols-12" >
+    <%- include("../components/menu") %>
+    <section class="text-on-primary col-span-12 lg:col-span-11 px-2" >
+        <h1>Welcome to <%= title %></h1>
+    </section>
+</div>
+
+<%- include("../components/footer") %>
