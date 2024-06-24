@@ -9,9 +9,16 @@ const fs = require("fs")
 const env = require("dotenv");
 const { LangMiddleware } = require('./middlewares/middleware');
 const lang = require('./locales/lang');
+const { myDataSource } = require('./libs/database');
 
 // env
 env.config()
+
+// Typeorm executing
+myDataSource.on("connect", () => {
+    console.log('Connected to the database');
+})
+
 
 // 
 app.use( LangMiddleware )
@@ -36,6 +43,21 @@ app.get("/lang/:lang", (req, res) => {
     }
     res.cookie("LANG", req.params.lang, { maxAge: 24 * 60 * 60 * 7, httpOnly: true })
     return res.redirect(req.get("Referrer") || "/")
+})
+
+app.get("/test", async (req, res)=>{
+    try {
+        const client = await myDataSource.connect();
+        const result = await client.query(`CREATE TABLE test(
+                name varchar(20),
+                age INTEGER
+            )`);
+        res.send(result.rows);
+        client.release();
+      } catch (err) {
+        console.error(err);
+        res.send('Error ' + err);
+      }
 })
 
 // Router

@@ -1142,6 +1142,14 @@ input:checked + .toggle-bg {
   left: 0px;
 }
 
+.left-\[-1000px\] {
+  left: -1000px;
+}
+
+.left-\[-36px\] {
+  left: -36px;
+}
+
 .right-0 {
   right: 0px;
 }
@@ -1150,48 +1158,8 @@ input:checked + .toggle-bg {
   top: 0px;
 }
 
-.left-\[1000px\] {
-  left: 1000px;
-}
-
-.left-\[-1000px\] {
-  left: -1000px;
-}
-
-.left-9 {
-  left: 2.25rem;
-}
-
-.top-\[10px\] {
-  top: 10px;
-}
-
-.top-\[200px\] {
-  top: 200px;
-}
-
-.top-\[50\%\] {
-  top: 50%;
-}
-
 .top-\[30\%\] {
   top: 30%;
-}
-
-.left-\[-10px\] {
-  left: -10px;
-}
-
-.left-\[-32px\] {
-  left: -32px;
-}
-
-.left-\[-3px\] {
-  left: -3px;
-}
-
-.left-\[-36px\] {
-  left: -36px;
 }
 
 .isolate {
@@ -3522,17 +3490,28 @@ input:checked + .toggle-bg {
   }
 }
 
+@media (min-width: 768px) {
+  .md\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
 @media (min-width: 1024px) {
   .lg\:static {
     position: static;
   }
 
-  .lg\:col-span-1 {
-    grid-column: span 1 / span 1;
+  .lg\:col-span-10 {
+    grid-column: span 10 / span 10;
   }
 
   .lg\:col-span-11 {
     grid-column: span 11 / span 11;
+  }
+
+  .lg\:col-span-2 {
+    grid-column: span 2 / span 2;
   }
 
   .lg\:hidden {

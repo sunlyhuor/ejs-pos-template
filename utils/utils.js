@@ -9,7 +9,7 @@ function parseCookieString(cookieString) {
         // Split each pair by '=' to get the key and value
         const [key, value] = pair.split('=');
         // Assign the key-value pair to the object
-        cookieObj[key] = value;
+        cookieObj[key.trim()] = value;
     });
 
     return cookieObj;

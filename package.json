@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/express": "^4.17.21",
     "axios": "^1.7.2",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -7,14 +8,22 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "flowbite": "^2.3.0",
-    "nodemon": "^3.1.4"
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.4",
+    "pg": "^8.12.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   },
   "scripts": {
     "dev:web": "nodemon web",
     "dev:api": "nodemon web",
-    "build:css": "npx tailwindcss -i ./views/css/index.css -o ./views/css/output.css --watch"
+    "build:css": "npx tailwindcss -i ./views/css/index.css -o ./views/css/output.css --watch",
+    "migrate": "node common/migration/migrate"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.4"
+    "bcrypt": "^5.1.1",
+    "postgres": "^3.4.4",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.5.2"
   }
 }
