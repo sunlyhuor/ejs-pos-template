@@ -1,10 +1,7 @@
 <%- include("../components/header") %>
-        <script>
-            async function login(){
-                console.log( await axios("") )
-            }
-        </script>
         <h1>Welcome to <%= title %></h1>
-        <%- include("../components/form/input", {placeholder: "ajsjdasj"}) %>
-        <button onclick="login()" > Login </button>
+        <form action="/api/login" method="post" >
+            <%- include("../components/form/input", {placeholder: "ajsjdasj", name: "name"}) %>
+            <button onclick="" > Login </button>
+        </form>
 <%- include("../components/footer") %>

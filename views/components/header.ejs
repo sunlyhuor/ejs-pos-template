@@ -8,7 +8,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="bg-primary" >
-    <header>
-        <a href="/lang/kh" >Khmer</a>
-        <a href="/lang/en" >English</a>
+    <header class="flex justify-between py-2 items-center px-2" >
+        <div>
+            <h1>POS</h1>
+        </div>
+        <div class="flex" >
+            <% if(lang != "kh"){ %>
+                <a href="/lang/kh" class="w-[32px]" >
+                    <img class="w-full" src="/assets/icons/kh.svg" />
+                </a>
+            <% }else{ %>
+                <a href="/lang/en" class="w-[36px]" >
+                    <img class="w-full" src="/assets/icons/us.svg" />
+                </a>
+            <% } %>
+        </div>
     </header>

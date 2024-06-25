@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const path = require("path")
 const fs = require("fs")
 const env = require("dotenv");
-const { LangMiddleware } = require('./middlewares/middleware');
+const { LangMiddleware, AuthenticateMiddleware } = require('./middlewares/middleware');
 const lang = require('./locales/lang');
 const { myDataSource } = require('./libs/database');
 
@@ -34,6 +34,7 @@ app.use(cookieParser());
 
 // Public assets
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Change lang
 app.get("/lang/:lang", (req, res) => {
@@ -45,26 +46,42 @@ app.get("/lang/:lang", (req, res) => {
     return res.redirect(req.get("Referrer") || "/")
 })
 
-app.get("/test", async (req, res)=>{
-    try {
-        const client = await myDataSource.connect();
-        const result = await client.query(`CREATE TABLE test(
-                name varchar(20),
-                age INTEGER
-            )`);
-        res.send(result.rows);
-        client.release();
-      } catch (err) {
-        console.error(err);
-        res.send('Error ' + err);
-      }
-})
+// api
+app.use("/api", userApi)
 
 // Router
 app.use( user )
 
+app.get( "/unauthorized", (req, res) => {
+    res.render("html/unauthorized")
+} )
+
+app.get("/logout", (req, res) => {
+    res.cookie("accessToken", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.cookie("refreshToken", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.cookie("isLogin", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.cookie("user", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.redirect("/login")
+})
+
+app.get("/*", async (req, res)=>{
+    res.render("html/not-found")
+})
+
 // Api
-app.use("/api", userApi)
+// app.use("/api", userApi)
 
 // Start the server
 const port = process.env.PORT || 3000

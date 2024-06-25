@@ -3,6 +3,7 @@
         <li id="burger" class="fixed top-[30%] left-[-36px] text-center p-5 text-4xl cursor-pointer lg:hidden " ><i class="fa-solid fa-burger"></i></li>
         <li><a href="/" class="justify-center <%= !pathname || pathname == '/' ? 'bg-secondary text-on-secondary' : '' %> hover:opacity-[0.6] bg-primary text-on-secondary text-sm lg:text-md xl:text-lg flex items-center gap-2 p-5 lg:p-3" > <i class="fa-solid fa-house"></i> Home</a></li>
         <li><a href="/about" class="justify-center <%= pathname == '/about' ? 'bg-secondary text-on-secondary' : '' %> hover:opacity-[0.6] bg-primary text-on-secondary text-sm lg:text-md xl:text-lg flex items-center gap-2 p-5 lg:p-3" > <i class="fa-solid fa-users"></i> About</a></li>
+        <li><a href="/logout" class="justify-center <%= pathname == '/logout' ? 'bg-secondary text-on-secondary' : '' %> hover:opacity-[0.6] bg-primary text-on-secondary text-sm lg:text-md xl:text-lg flex items-center gap-2 p-5 lg:p-3" > <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
     </ul>
 </nav>
 <!-- left-[-1000px] -->
