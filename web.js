@@ -34,6 +34,7 @@ app.use(cookieParser());
 
 // Public assets
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Change lang
 app.get("/lang/:lang", (req, res) => {
@@ -45,26 +46,16 @@ app.get("/lang/:lang", (req, res) => {
     return res.redirect(req.get("Referrer") || "/")
 })
 
-app.get("/test", async (req, res)=>{
-    try {
-        const client = await myDataSource.connect();
-        const result = await client.query(`CREATE TABLE test(
-                name varchar(20),
-                age INTEGER
-            )`);
-        res.send(result.rows);
-        client.release();
-      } catch (err) {
-        console.error(err);
-        res.send('Error ' + err);
-      }
-})
 
 // Router
 app.use( user )
 
+app.get("/*", async (req, res)=>{
+    res.render("html/not-found")
+})
+
 // Api
-app.use("/api", userApi)
+// app.use("/api", userApi)
 
 // Start the server
 const port = process.env.PORT || 3000
