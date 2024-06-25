@@ -7,7 +7,7 @@ const cookieParser = require('cookie-parser');
 const path = require("path")
 const fs = require("fs")
 const env = require("dotenv");
-const { LangMiddleware } = require('./middlewares/middleware');
+const { LangMiddleware, AuthenticateMiddleware } = require('./middlewares/middleware');
 const lang = require('./locales/lang');
 const { myDataSource } = require('./libs/database');
 
@@ -46,9 +46,35 @@ app.get("/lang/:lang", (req, res) => {
     return res.redirect(req.get("Referrer") || "/")
 })
 
+// api
+app.use("/api", userApi)
 
 // Router
 app.use( user )
+
+app.get( "/unauthorized", (req, res) => {
+    res.render("html/unauthorized")
+} )
+
+app.get("/logout", (req, res) => {
+    res.cookie("accessToken", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.cookie("refreshToken", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.cookie("isLogin", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.cookie("user", "", {
+        maxAge: -1,
+        httpOnly: true
+    })
+    res.redirect("/login")
+})
 
 app.get("/*", async (req, res)=>{
     res.render("html/not-found")
