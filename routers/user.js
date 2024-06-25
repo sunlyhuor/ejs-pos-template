@@ -1,6 +1,6 @@
 const express = require("express");
 const locale = require("../utils/locale");
-const { AuthenticateMiddleware, IsLoginMiddlware } = require("../middlewares/middleware");
+const { AuthenticateMiddleware, IsLoginMiddlware, Authorize } = require("../middlewares/middleware");
 const routers = express.Router()
 
 // Define a route to render an EJS template
@@ -13,7 +13,7 @@ routers.get('/', AuthenticateMiddleware, (req, res) => {
                             });
 });
 
-routers.get('/about', AuthenticateMiddleware, (req, res) => {
+routers.get('/about', AuthenticateMiddleware, Authorize(["user"]), (req, res) => {
     // Render views/index.ejs
     res.render('html/about', { 
                                 title: 'Express Render About page',
