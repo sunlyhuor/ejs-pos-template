@@ -56,43 +56,25 @@ function capitalizeFirstLetter(string) {
       }
       return string.charAt(0).toUpperCase() + string.slice(1); 
 }
+
+
+async function createTables(sql){
+  const client = await myDataSource.connect();
+    try {
+        await client.query(sql);
+        console.log("Migration successfully")
+    }catch(e){
+      console.log(e)
+    }
+    finally {
+        await client.release();
+    }
+}
   
 if( params[0] == "migrate" ){
-    fs.readdir( path.join("common", "entity") , async (err, files) => {
-      if (err) {
-        return console.error('Unable to scan directory: ' + err);
-      }
-      // Listing all files using forEach
-      files.forEach( async (file) => {
-        const client = await myDataSource.connect();
-        try {
-            const requiredModule = require("../entity/"+file)
-            const modules = {};
-            const variableName =  capitalizeFirstLetter(file.split(".")[1]) + "MigrateEntity"
-
-            // Store the module in the 'modules' object
-            modules[variableName] = requiredModule;
-
-            let query = ""
-            const entityObject = (modules[variableName][variableName])
-            for( let k in entityObject){
-                if( Object.keys(entityObject)[Object.keys(entityObject).length - 1] != k ){
-                    query += k + " " + entityObject[k] + ","
-                }else{
-                    query += k + " " + entityObject[k]
-                }
-            }
-            // console.log(query)
-            await client.query(`CREATE TABLE IF NOT EXISTS ${file.split(".")[1]}( ${query} )`);
-            console.log("Migrated " + file.split(".")[1] + "table successfully")
-        } catch (err) {
-            console.error(err);
-            client.release();
-            return
-        }
-        client.release();
-      });
-    });
+    const sql = fs.readFileSync( path.join("sql", "table.sql") , 'utf8');
+    createTables( sql )
+    
 }else if(  params[0] == "clear" ){
   clearTable()
 }else{

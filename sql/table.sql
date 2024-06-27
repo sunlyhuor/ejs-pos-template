@@ -1,0 +1,140 @@
+CREATE TABLE IF NOT EXISTS roles(
+    id SERIAL PRIMARY KEY,
+    name varchar(25),
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS stores(
+     id SERIAL PRIMARY KEY,
+    location varchar(50),
+    active BOOLEAN DEFAULT TRUE,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS files(
+    id SERIAL PRIMARY KEY,
+    name varchar(50) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS users(
+    id SERIAL PRIMARY KEY,
+    username varchar(50),
+    role_id INTEGER NOT NULL,
+    card_id INTEGER NOT NULL,
+    password varchar(250) NOT NULL,
+    dob DATE NOT NULL,
+    profile_id INTEGER NOT NULL,
+    salary  NUMERIC(10, 2) NOT NULL,
+    active BOOLEAN DEFAULT FALSE,
+    store_id INTEGER NOT NULL,
+    FOREIGN  KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (card_id) REFERENCES files(id) ON DELETE CASCADE,
+    FOREIGN KEY (profile_id) REFERENCES files(id) ON DELETE CASCADE,
+    FOREIGN  KEY (store_id) REFERENCES stores(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS categories(
+    id SERIAL PRIMARY KEY,
+    name varchar(50),
+    user_id INTEGER,
+    active BOOLEAN DEFAULT FALSE,
+    icon_url varchar(250),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS products(
+    id SERIAL PRIMARY KEY,
+    name varchar(50),
+    user_id INTEGER,
+    category_id INTEGER,
+    active BOOLEAN DEFAULT FALSE,
+    description TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS product_sizes(
+    id SERIAL PRIMARY KEY,
+    size varchar(3),
+    user_id INTEGER,
+    active BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS product_size_details(
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    product_size_id INTEGER NOT NULL,
+    image_id INTEGER NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    original_price NUMERIC(10, 2) NOT NULL,
+    active BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_size_id) REFERENCES product_sizes(id) ON DELETE CASCADE,
+    FOREIGN KEY (image_id) REFERENCES files(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS promo_codes(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(25) NOT NULL,
+    code VARCHAR(25) NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    expire TIMESTAMP,
+    active BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS orders(
+    id SERIAL PRIMARY KEY,
+    promo_code_id INTEGER,
+    customer_name varchar(25),
+    active BOOLEAN DEFAULT FALSE,
+    user_id INTEGER NOT NULL,
+    discount NUMERIC(10,2),
+    FOREIGN KEY (promo_code_id) REFERENCES promo_codes(id) ON DELETE SET NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_details(
+    id SERIAL PRIMARY KEY,
+    product_size_deatil_id INTEGER NOT NULL,
+    order_id INTEGER NOT NULL,
+    active BOOLEAN DEFAULT FALSE,
+    user_id INTEGER NOT NULL,
+    price NUMERIC(10, 2),
+    original_price NUMERIC(10, 2),
+    FOREIGN KEY (product_size_deatil_id) REFERENCES product_size_details(id) ON DELETE RESTRICT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT,
+    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE RESTRICT,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS reports(
+    id SERIAL PRIMARY KEY,
+    file_id INTEGER NOT NULL,
+    FOREIGN KEY (file_id) REFERENCES files(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+);
